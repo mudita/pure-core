@@ -1,50 +1,49 @@
 #pragma once
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-//! Boot reason code
+/// Boot reason code
 enum boot_reason_code_code {
-    boot_reason_code_update = 0,   //! Restart caused by the update request
-    boot_reason_code_recovery = 1, //! Restart caused by the recovery request
-    boot_reason_code_factory = 2,  //! Restart caused by the factory reset request
-    boot_reason_code_pgm_keys = 3, //! Load keys request (close configuration)
+    boot_reason_code_update = 0xF001,   /// Restart caused by the update request
+    boot_reason_code_recovery, /// Restart caused by the recovery request
+    boot_reason_code_factory,  /// Restart caused by the factory reset request
+    boot_reason_code_pgm_keys, /// Load keys request (close configuration)
+    boot_reason_code_usb_mc_mode, /// Restart caused by the USB MSC request
+    boot_reason_code_backup, /// Restart caused by the backup request
+    boot_reason_code_restore, /// Restart caused by the restore request
+    boot_reason_code_os, /// Restart caused by the os itself
     boot_reason_code_unknown,  //! Unknown boot reason code
 };
 
-/** Get the system boot resason code
+/** Get the system boot reason code
  * @return @boot_reason_code_code
  */
 enum boot_reason_code_code boot_reason(void);
 
-/** Get the system boot reason code string
- * @return Boot reason string
+/** Get the system boot reason code encoded as a string
+ * @return string describing boot reason
  */
-static const char *boot_reason_code_str(enum boot_reason_code_code code) {
-    const char *boot_reason_code_str(enum boot_reason_code_code code) {
-        switch (code) {
-            case boot_reason_code_update:
-                return "boot_reason_code_update";
-            case boot_reason_code_recovery:
-                return "boot_reason_code_recovery";
-            case boot_reason_code_factory:
-                return "boot_reason_code_factory";
-            case boot_reason_code_unknown:
-                return "boot_reason_code_unknown";
-            case boot_reason_code_pgm_keys:
-                return "boot_reason_code_pgm_keys";
-            default:
-                return "not in enum boot_reason_code_code";
-        }
-    }
-}
+const char *boot_reason_code_str(enum boot_reason_code_code code);
 
-/** Set the system boot resason code
+/** Set the system boot reason code
  * @param code @boot_reason_code_code
  */
 void set_boot_reason(enum boot_reason_code_code code);
+
+/** Set the status of the OS boot
+ * @param status true if the os booted successfully, otherwise false
+ */
+void set_os_boot_status(bool status);
+
+/** Checks if the OS booted successfully
+ * @return true if the os booted successfully, otherwise false
+ */
+bool get_os_boot_status();
 
 #ifdef __cplusplus
 }

@@ -7,6 +7,7 @@ add_subdirectory(third-party)
 
 add_library(pure-core STATIC
         src/boot_control.c
+        src/boot_reason.c
         src/common/json.c
         )
 add_library(pure::core ALIAS pure-core)

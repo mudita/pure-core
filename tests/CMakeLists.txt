@@ -9,7 +9,7 @@ FetchContent_MakeAvailable(catch2)
 
 
 project(pure-core-tests)
-add_executable(pure-core-tests boot_control.cpp)
+add_executable(pure-core-tests boot_control.cpp boot_reason.cpp)
 
 target_compile_features(pure-core-tests PRIVATE cxx_std_17)
 target_link_libraries(pure-core-tests PRIVATE pure-core Catch2::Catch2WithMain)
