@@ -23,6 +23,7 @@ static cJSON *boot_attempts_max = NULL;
 static cJSON *os_bin = NULL;
 static cJSON *recovery_bin = NULL;
 static cJSON *bin_dir = NULL;
+static cJSON *update_dir = NULL;
 static json_slot slot_a = {};
 static json_slot slot_b = {};
 
@@ -95,6 +96,10 @@ int boot_control_init(const char *boot_file) {
     if (bin_dir == NULL) {
         return -1;
     }
+    update_dir = json_get_item_from(boot, "update_dir");
+    if (update_dir == NULL) {
+        return -1;
+    }
     if (!init_slot(json_get_item_from(slots, "a"), &slot_a) ||
         !init_slot(json_get_item_from(slots, "b"), &slot_b)) {
         return -1;
@@ -143,7 +148,7 @@ bool is_successful(slot_t slot) {
     return cJSON_IsTrue(get_json_slot(slot)->successful);
 }
 
-slot_t get_active() {
+slot_t get_next_active() {
     return get_current_slot() == Slot_A ? Slot_B : Slot_A;
 }
 
@@ -151,7 +156,7 @@ size_t get_boot_attempts_left(slot_t slot) {
     return (size_t) cJSON_GetNumberValue(get_json_slot(slot)->boot_attempts_left);
 }
 
-const char *get_suffix(slot_t slot) {
+const char *get_prefix(slot_t slot) {
     return get_json_slot(slot)->prefix->valuestring;
 }
 
@@ -174,4 +179,8 @@ int decrease_boot_attempt() {
         return reload();
     }
     return 0;
+}
+
+const char *get_update_dir() {
+    return update_dir->valuestring;
 }

@@ -87,15 +87,15 @@ size_t get_boot_attempts_left(slot_t slot);
 /**
  * Returns the active slot to boot into on the next boot.
  */
-slot_t get_active();
+slot_t get_next_active();
 
 /**
- * Returns the string suffix used by partitions that
+ * Returns the string prefix used by partitions that
  * correspond to the slot number passed in parameter. The returned string
  * is expected to be statically allocated and not need to be freed.
  * Returns NULL if slot does not match an existing slot.
  */
-const char *get_suffix(slot_t slot);
+const char *get_prefix(slot_t slot);
 
 /**
  * Returns the os binary name. The returned string
@@ -114,6 +114,11 @@ const char *get_recovery();
  * is expected to be statically allocated and not need to be freed.
  */
 const char *get_binary_dir();
+
+/**
+ * Returns the directory that stores unpacked update package contents
+ */
+const char *get_update_dir();
 
 #ifdef __cplusplus
 }

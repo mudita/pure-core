@@ -27,7 +27,8 @@ void create_boot_json() {
                                    "    },\n"
                                    "    \"os\": \"boot.bin\",\n"
                                    "    \"recovery\": \"recovery.bin\",\n"
-                                   "    \"bin_dir\": \"bin\"\n"
+                                   "    \"bin_dir\": \"bin\",\n"
+                                   "    \"update_dir\": \"/user/update\"\n"
                                    "  }\n"
                                    "}";
 
@@ -43,11 +44,12 @@ TEST_CASE("Boot control module") {
     REQUIRE(std::string{get_os()} == "boot.bin");
     REQUIRE(std::string{get_recovery()} == "recovery.bin");
     REQUIRE(std::string{get_binary_dir()} == "bin");
-    REQUIRE(std::string{get_suffix(Slot_A)} == "/system_a");
-    REQUIRE(std::string{get_suffix(Slot_B)} == "/system_b");
+    REQUIRE(std::string{get_prefix(Slot_A)} == "/system_a");
+    REQUIRE(std::string{get_prefix(Slot_B)} == "/system_b");
+    REQUIRE(std::string{get_update_dir()} == "/user/update");
     REQUIRE(get_boot_attempts_left(Slot_A) == 1);
     REQUIRE(get_boot_attempts_left(Slot_B) == 10);
-    REQUIRE(get_active() == Slot_B);
+    REQUIRE(get_next_active() == Slot_B);
     REQUIRE(get_current_slot() == Slot_A);
     REQUIRE(get_slots_number() == 2);
     REQUIRE(is_bootable(Slot_A));
@@ -68,7 +70,7 @@ TEST_CASE("Boot control module") {
         REQUIRE(is_successful(Slot_B));
     }
 
-    SECTION("boot attempts"){
+    SECTION("boot attempts") {
         /// slot A
         REQUIRE(decrease_boot_attempt() == 0);
         REQUIRE(get_boot_attempts_left(Slot_A) == 0);
