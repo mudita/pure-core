@@ -8,7 +8,7 @@ extern "C"
 #endif
 
 /// Boot reason code
-enum boot_reason_code_code {
+enum boot_reason_code {
     boot_reason_code_update = 0xF001,   /// Restart caused by the update request
     boot_reason_code_recovery, /// Restart caused by the recovery request
     boot_reason_code_factory,  /// Restart caused by the factory reset request
@@ -23,17 +23,17 @@ enum boot_reason_code_code {
 /** Get the system boot reason code
  * @return @boot_reason_code_code
  */
-enum boot_reason_code_code boot_reason(void);
+enum boot_reason_code boot_reason(void);
 
 /** Get the system boot reason code encoded as a string
  * @return string describing boot reason
  */
-const char *boot_reason_code_str(enum boot_reason_code_code code);
+const char *boot_reason_code_str(enum boot_reason_code code);
 
 /** Set the system boot reason code
  * @param code @boot_reason_code_code
  */
-void set_boot_reason(enum boot_reason_code_code code);
+void set_boot_reason(enum boot_reason_code code);
 
 /** Set the status of the OS boot
  * @param status true if the os booted successfully, otherwise false
@@ -44,6 +44,11 @@ void set_os_boot_status(bool status);
  * @return true if the os booted successfully, otherwise false
  */
 bool get_os_boot_status();
+
+/** Checks if the device is booting from shutdown state
+ * @return true if the os is booting from shutdown state, otherwise false
+ */
+bool get_os_clean_boot_status();
 
 #ifdef __cplusplus
 }

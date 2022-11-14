@@ -20,12 +20,12 @@ static void update_os_status_code(const uint16_t code) {
     boot_reason_set_raw(current | code << 16U);
 }
 
-static enum boot_reason_code_code deconstruct_boot_reason_code(const uint32_t reg) {
+static enum boot_reason_code deconstruct_boot_reason_code(const uint32_t reg) {
     const uint16_t value = reg & 0xFFFF;
     if (value >= boot_reason_code_unknown || value < boot_reason_code_update) {
         return boot_reason_code_unknown;
     }
-    return (enum boot_reason_code_code) (value);
+    return (enum boot_reason_code) (value);
 }
 
 static uint16_t deconstruct_os_status_code(const uint32_t reg) {
@@ -33,15 +33,15 @@ static uint16_t deconstruct_os_status_code(const uint32_t reg) {
     return status;
 }
 
-enum boot_reason_code_code boot_reason(void) {
+enum boot_reason_code boot_reason(void) {
     return deconstruct_boot_reason_code(boot_reason_get_raw());
 }
 
-void set_boot_reason(enum boot_reason_code_code code) {
+void set_boot_reason(enum boot_reason_code code) {
     update_boot_reason_code(code);
 }
 
-const char *boot_reason_code_str(enum boot_reason_code_code code) {
+const char *boot_reason_code_str(enum boot_reason_code code) {
     switch (code) {
         case boot_reason_code_update:
             return "boot_reason_code_update";
@@ -62,7 +62,7 @@ const char *boot_reason_code_str(enum boot_reason_code_code code) {
         case boot_reason_code_os:
             return "boot_reason_code_os";
         default:
-            return "not in enum boot_reason_code_code";
+            return "not in enum boot_reason_code";
     }
 }
 

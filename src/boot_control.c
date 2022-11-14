@@ -5,6 +5,8 @@
 
 #include "common/json.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
     cJSON *bootable;
@@ -26,6 +28,20 @@ static cJSON *bin_dir = NULL;
 static cJSON *update_dir = NULL;
 static json_slot slot_a = {};
 static json_slot slot_b = {};
+
+static size_t json_string_to_unsigned(const cJSON* json){
+    const char* string = cJSON_GetStringValue(json);
+    if(string){
+        return strtoul(string,NULL,10);
+    }
+    return 0;
+}
+
+static void set_json_string_with_unsigned(cJSON* json, size_t value){
+    static char conversion_buffer[4] = {};
+    snprintf(conversion_buffer,sizeof(conversion_buffer),"%zu",value);
+    cJSON_SetValuestring(json, conversion_buffer);
+}
 
 static bool is_slot_valid(const json_slot *const slot) {
     return slot->bootable != NULL && slot->prefix != NULL && slot->boot_attempts_left != NULL &&
@@ -49,7 +65,7 @@ static const char *get_slot_str(slot_t slot) {
 }
 
 static size_t get_reboot_count_max() {
-    return (size_t) cJSON_GetNumberValue(boot_attempts_max);
+    return json_string_to_unsigned(boot_attempts_max);
 }
 
 static int reload() {
@@ -127,7 +143,7 @@ int mark_as_successful() {
 
 int mark_as_active(slot_t slot) {
     cJSON_SetValuestring(active, get_slot_str(slot));
-    cJSON_SetNumberValue(get_json_slot(slot)->boot_attempts_left, get_reboot_count_max());
+    set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left,get_reboot_count_max());
 
     return reload();
 }
@@ -135,8 +151,8 @@ int mark_as_active(slot_t slot) {
 int mark_as_unbootable(slot_t slot) {
     get_json_slot(slot)->bootable->type = cJSON_False;
     get_json_slot(slot)->successful->type = cJSON_False;
-    cJSON_SetNumberValue(get_json_slot(slot)->boot_attempts_left, get_reboot_count_max());
 
+    set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left,get_reboot_count_max());
     return reload();
 }
 
@@ -153,7 +169,7 @@ slot_t get_next_active() {
 }
 
 size_t get_boot_attempts_left(slot_t slot) {
-    return (size_t) cJSON_GetNumberValue(get_json_slot(slot)->boot_attempts_left);
+    return json_string_to_unsigned(get_json_slot(slot)->boot_attempts_left);
 }
 
 const char *get_prefix(slot_t slot) {
@@ -173,9 +189,9 @@ const char *get_binary_dir() {
 }
 
 int decrease_boot_attempt() {
-    size_t value = (size_t) cJSON_GetNumberValue(get_json_slot(get_current_slot())->boot_attempts_left);
+    size_t value = get_boot_attempts_left(get_current_slot());
     if (value > 0) {
-        cJSON_SetNumberValue(get_json_slot(get_current_slot())->boot_attempts_left, --value);
+        set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left,--value);
         return reload();
     }
     return 0;

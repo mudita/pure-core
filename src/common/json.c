@@ -8,7 +8,7 @@
 #endif
 
 static void autoclose(FILE **f) {
-    if (*f > 0) {
+    if (*f != NULL) {
         fclose(*f);
     }
 }
