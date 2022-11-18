@@ -39,7 +39,7 @@ static size_t json_string_to_unsigned(const cJSON* json){
 
 static void set_json_string_with_unsigned(cJSON* json, size_t value){
     static char conversion_buffer[4] = {};
-    snprintf(conversion_buffer,sizeof(conversion_buffer),"%zu",value);
+    snprintf(conversion_buffer,sizeof(conversion_buffer),"%lu",(unsigned long)value);
     cJSON_SetValuestring(json, conversion_buffer);
 }
 
