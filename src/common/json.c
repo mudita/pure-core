@@ -37,8 +37,7 @@ cJSON *json_from_file(const char *path) {
 
     const size_t file_size = get_file_size(fd);
 
-    AUTOFREE(buffer) = malloc(file_size);
-    memset(buffer, 0, file_size);
+    AUTOFREE(buffer) = calloc(1, file_size + 1);
     size_t bytes_read = fread(buffer, 1, file_size, fd);
     if (bytes_read != file_size) {
         debug_log("JSON: failed to read data from file %s", path);
