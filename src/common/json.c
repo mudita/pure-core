@@ -72,7 +72,7 @@ int json_to_file(const char *path, const cJSON *json) {
         return -1;
     }
 
-    const char *contents = cJSON_Print(json);
+    char *contents = cJSON_Print(json);
     if (contents == NULL) {
         debug_log("JSON: failed to generate json string: %s", path);
         return -1;
@@ -80,7 +80,7 @@ int json_to_file(const char *path, const cJSON *json) {
 
     const size_t contents_len = strlen(contents);
     const size_t written = fwrite(contents, 1, contents_len, fd);
-    free((void *) contents);
+    cJSON_free(contents);
     if (contents_len != written) {
         debug_log("JSON: failed to write data to file %s", path);
         return -1;

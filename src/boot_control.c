@@ -79,7 +79,10 @@ static int reload() {
 
 
 int boot_control_init(const char *boot_file) {
-    strncpy(file_path, boot_file, sizeof(file_path));
+    /* Prevent crash due to strings overlap */
+    if (boot_file != file_path) {
+        strncpy(file_path, boot_file, sizeof(file_path));
+    }
     root = json_from_file(file_path);
     if (root == NULL) {
         return -1;
