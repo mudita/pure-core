@@ -126,6 +126,11 @@ int boot_control_init(const char *boot_file) {
     return 0;
 }
 
+void boot_control_deinit(){
+    cJSON_Delete(root);
+    root = NULL;
+}
+
 size_t get_slots_number() {
     return Slots;
 }

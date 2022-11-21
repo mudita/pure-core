@@ -25,6 +25,13 @@ extern "C"
 int boot_control_init(const char *boot_file);
 
 /**
+ * Perform deinitialization tasks.
+ * This is called only once.
+ * Not calling deinit can cause memory leaks.
+ */
+void boot_control_deinit();
+
+/**
  * Returns the number of available slots.
  * For instance, a system with a single set of partitions would return
  * 1, a system with A/B would return 2, A/B/C -> 3...
