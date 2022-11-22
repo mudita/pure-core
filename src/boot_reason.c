@@ -44,23 +44,23 @@ void set_boot_reason(enum boot_reason_code code) {
 const char *boot_reason_code_str(enum boot_reason_code code) {
     switch (code) {
         case boot_reason_code_update:
-            return "boot_reason_code_update";
+            return "update";
         case boot_reason_code_recovery:
-            return "boot_reason_code_recovery";
+            return "recovery";
         case boot_reason_code_factory:
-            return "boot_reason_code_factory";
+            return "factory";
         case boot_reason_code_unknown:
-            return "boot_reason_code_unknown";
+            return "unknown";
         case boot_reason_code_pgm_keys:
-            return "boot_reason_code_pgm_keys";
+            return "pgm_keys";
         case boot_reason_code_backup:
-            return "boot_reason_code_backup";
+            return "backup";
         case boot_reason_code_restore:
-            return "boot_reason_code_restore";
+            return "restore";
         case boot_reason_code_usb_mc_mode:
-            return "boot_reason_code_usb_mc_mode";
+            return "usb_mc_mode";
         case boot_reason_code_os:
-            return "boot_reason_code_os";
+            return "code_os";
         default:
             return "not in enum boot_reason_code";
     }

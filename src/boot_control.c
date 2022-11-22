@@ -29,17 +29,17 @@ static cJSON *update_dir = NULL;
 static json_slot slot_a = {};
 static json_slot slot_b = {};
 
-static size_t json_string_to_unsigned(const cJSON* json){
-    const char* string = cJSON_GetStringValue(json);
-    if(string){
-        return strtoul(string,NULL,10);
+static size_t json_string_to_unsigned(const cJSON *json) {
+    const char *string = cJSON_GetStringValue(json);
+    if (string) {
+        return strtoul(string, NULL, 10);
     }
     return 0;
 }
 
-static void set_json_string_with_unsigned(cJSON* json, size_t value){
+static void set_json_string_with_unsigned(cJSON *json, size_t value) {
     static char conversion_buffer[4] = {};
-    snprintf(conversion_buffer,sizeof(conversion_buffer),"%lu",(unsigned long)value);
+    snprintf(conversion_buffer, sizeof(conversion_buffer), "%lu", (unsigned long) value);
     cJSON_SetValuestring(json, conversion_buffer);
 }
 
@@ -74,11 +74,14 @@ static int reload() {
         return ret;
     }
     //Reload internal structures with the new data
+    boot_control_deinit();
     return boot_control_init(file_path);
 }
 
 
 int boot_control_init(const char *boot_file) {
+    boot_control_deinit();
+    
     /* Prevent crash due to strings overlap */
     if (boot_file != file_path) {
         strncpy(file_path, boot_file, sizeof(file_path));
@@ -126,7 +129,7 @@ int boot_control_init(const char *boot_file) {
     return 0;
 }
 
-void boot_control_deinit(){
+void boot_control_deinit() {
     cJSON_Delete(root);
     root = NULL;
 }
@@ -151,7 +154,7 @@ int mark_as_successful() {
 
 int mark_as_active(slot_t slot) {
     cJSON_SetValuestring(active, get_slot_str(slot));
-    set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left,get_reboot_count_max());
+    set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left, get_reboot_count_max());
 
     return reload();
 }
@@ -160,7 +163,7 @@ int mark_as_unbootable(slot_t slot) {
     get_json_slot(slot)->bootable->type = cJSON_False;
     get_json_slot(slot)->successful->type = cJSON_False;
 
-    set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left,get_reboot_count_max());
+    set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left, get_reboot_count_max());
     return reload();
 }
 
@@ -199,7 +202,7 @@ const char *get_binary_dir() {
 int decrease_boot_attempt() {
     size_t value = get_boot_attempts_left(get_current_slot());
     if (value > 0) {
-        set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left,--value);
+        set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left, --value);
         return reload();
     }
     return 0;
