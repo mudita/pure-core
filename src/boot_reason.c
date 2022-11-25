@@ -60,7 +60,7 @@ const char *boot_reason_code_str(enum boot_reason_code code) {
         case boot_reason_code_usb_mc_mode:
             return "usb_mc_mode";
         case boot_reason_code_os:
-            return "code_os";
+            return "os";
         default:
             return "not in enum boot_reason_code";
     }
