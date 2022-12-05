@@ -81,7 +81,7 @@ static int reload() {
 
 int boot_control_init(const char *boot_file) {
     boot_control_deinit();
-    
+
     /* Prevent crash due to strings overlap */
     if (boot_file != file_path) {
         strncpy(file_path, boot_file, sizeof(file_path));
@@ -156,6 +156,11 @@ int mark_as_active(slot_t slot) {
     cJSON_SetValuestring(active, get_slot_str(slot));
     set_json_string_with_unsigned(get_json_slot(get_current_slot())->boot_attempts_left, get_reboot_count_max());
 
+    return reload();
+}
+
+int mark_as_bootable(slot_t slot) {
+    get_json_slot(slot)->bootable->type = cJSON_True;
     return reload();
 }
 

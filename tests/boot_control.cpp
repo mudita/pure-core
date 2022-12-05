@@ -61,6 +61,8 @@ TEST_CASE("Boot control module") {
         REQUIRE(mark_as_unbootable(Slot_A) == 0);
         REQUIRE_FALSE(is_bootable(Slot_A));
         REQUIRE_FALSE(is_successful(Slot_A));
+        REQUIRE(mark_as_bootable(Slot_A) == 0);
+        REQUIRE(is_bootable(Slot_A));
 
         REQUIRE(mark_as_active(Slot_B) == 0);
         REQUIRE(get_current_slot() == Slot_B);

@@ -62,6 +62,13 @@ int mark_as_active(slot_t slot);
 
 /**
  * Marks the slot passed in parameter as
+ * an bootable.
+ * @return 0 if success, otherwise negative error code
+ */
+int mark_as_bootable(slot_t slot);
+
+/**
+ * Marks the slot passed in parameter as
  * an unbootable. This can be used while updating the contents of the slot's
  * partitions, so that the system will not attempt to boot a known bad set up.
  * @return 0 if success, otherwise negative error code
