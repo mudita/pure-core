@@ -38,7 +38,7 @@ static size_t json_string_to_unsigned(const cJSON *json) {
 }
 
 static void set_json_string_with_unsigned(cJSON *json, size_t value) {
-    static char conversion_buffer[4] = {};
+    static char conversion_buffer[21] = {};
     snprintf(conversion_buffer, sizeof(conversion_buffer), "%lu", (unsigned long) value);
     cJSON_SetValuestring(json, conversion_buffer);
 }
@@ -84,7 +84,7 @@ int boot_control_init(const char *boot_file) {
 
     /* Prevent crash due to strings overlap */
     if (boot_file != file_path) {
-        strncpy(file_path, boot_file, sizeof(file_path));
+        strncpy(file_path, boot_file, sizeof(file_path)-1);
     }
     root = json_from_file(file_path);
     if (root == NULL) {
